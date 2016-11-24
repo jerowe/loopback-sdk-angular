@@ -82,10 +82,6 @@ masterApp.post('/setup', function(req, res, next) {
   lbApp = loopback();
 
   lbApp.dataSource('db', { connector: 'memory' });
-  for (var m in initialModels) {
-    if (initialModels[m].base.modelName == 'PersistedModel')
-      lbApp.model(initialModels[m], { dataSource: 'db' });
-  }
 
   for (var m in models) {
     var model = null;
@@ -104,7 +100,7 @@ masterApp.post('/setup', function(req, res, next) {
   }
 
   if (enableAuth)
-    lbApp.enableAuth();
+    lbApp.enableAuth({ dataSource: 'db' });
 
   lbApp.set('restApiRoot', '/');
   lbApp.use(lbApp.get('restApiRoot'), loopback.rest());
